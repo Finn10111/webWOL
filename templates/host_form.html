@@ -1,0 +1,66 @@
+$def with (action, host)
+
+$if action == 'add':
+    $ name = ''
+    $ mac = ''
+    $ ip = ''
+    <h1>Add Host</h1>
+$if action == 'edit':
+    $ id = host.id
+    $ name = host.name
+    $ mac = host.mac
+    $ ip = host.ip
+    <h1>Edit Host</h1>
+<div class="row">
+
+$if action == 'add':
+    <form class="form-horizontal" action="/add" method="post">
+$if action == 'edit':
+    <form class="form-horizontal" action="/edit/$id" method="post">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Host details</legend>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="name">Hostname</label>  
+  <div class="col-md-4">
+  <input id="name" name="name" placeholder="example" class="form-control input-md" required="" type="text" value="$name">
+  <span class="help-block">Please enter hostname</span>  
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="mac">MAC Address</label>  
+  <div class="col-md-4">
+  <input id="mac" name="mac" placeholder="00:00:00:00:00:00" class="form-control input-md" required="" type="text" value="$mac">
+  <span class="help-block">Please enter mac address</span>  
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="ip">IP Address</label>  
+  <div class="col-md-4">
+  <input id="ip" name="ip" placeholder="192.168.5.23" class="form-control input-md" type="text" value="$ip">
+  <span class="help-block">Please enter ip address</span>  
+  </div>
+</div>
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="id"></label>
+  <div class="col-md-4">
+    <button type="submit" method="post" id="id" name="id" class="btn btn-primary">Submit</button>
+  </div>
+</div>
+
+</fieldset>
+</form>
+
+
+
+</div>
+

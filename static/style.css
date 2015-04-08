@@ -1,0 +1,17 @@
+body {
+      padding-top: 8px;
+}
+
+.host {
+    text-align: center;
+    background-color: #FEFEFE;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    box-shadow: 0 0 1px rgba(0,0,0, 0.2);
+    margin: 20px 0px;
+}
+
+.host button {
+    margin: 10px;
+}
+
