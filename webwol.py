@@ -16,7 +16,8 @@ urls = (
     '/edit/?', 'Edit',
     '/edit/(\d+)?', 'Edit',
     '/delete/(\d+)', 'Delete',
-    '/wol/(\d+)', 'Wol'
+    '/wol/?', 'Wol',
+    '/wol/(\d+)?', 'Wol'
 )
 
 render = web.template.render('templates/', cache=config.cache, base='base')
@@ -72,16 +73,33 @@ class Delete:
 
 
 class Wol:
-    def POST(self, id):
+    def POST(self, id=0):
         id = int(id)
-        host = db.get_host(id)
+        success = True
+        if id > 0:
+            host = db.get_host(id)
+            success = self.wakeup(host)
+        else:
+            hosts = db.get_hosts()
+            for host in hosts:
+                if not self.wakeup(host):
+                    success = False
 
+        if success:
+            return render.success('Magic packet was sent.')
+        else:
+            return render.error('An error occured. Please check your \
+                webserver\'s logs.')
+
+
+    def wakeup(self, host):
+        success = True
         try:
             wol.send_magic_packet(host.mac, ip_address=host.ip)
         except:
-            return render.error('An error occured. Please check your \
-                webserver\'s logs.')
-        return render.success('Magic packet was sent.')
+            success = False
+        return success
+
 
 
 app = web.application(urls, globals(), autoreload=True)
