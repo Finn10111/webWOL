@@ -2,6 +2,7 @@
 import sys
 import os
 import web
+import subprocess
 from wakeonlan import wol
 abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
@@ -17,7 +18,8 @@ urls = (
     '/edit/(\d+)?', 'Edit',
     '/delete/(\d+)', 'Delete',
     '/wol/?', 'Wol',
-    '/wol/(\d+)?', 'Wol'
+    '/wol/(\d+)?', 'Wol',
+    '/ping/([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})', 'Ping'
 )
 
 render = web.template.render('templates/', cache=config.cache, base='base')
@@ -99,6 +101,12 @@ class Wol:
         except:
             success = False
         return success
+
+class Ping:
+    def POST(self, ip):
+        pingable = subprocess.call('ping -W 3 -c 1 %s' % ip, shell=True)
+        return pingable
+
 
 
 

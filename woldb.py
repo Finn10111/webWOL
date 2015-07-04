@@ -4,7 +4,7 @@ db = config.db
 
 
 def get_hosts():
-    return db.select('host', order='id')
+    return db.select('host', order='name ASC')
 
 
 def get_host(id):
