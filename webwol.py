@@ -7,7 +7,7 @@ abspath = os.path.dirname(__file__)
 sys.path.append(abspath)
 os.chdir(abspath)
 import config
-import db
+import woldb
 
 urls = (
     '/', 'Index',
@@ -25,7 +25,7 @@ render = web.template.render('templates/', cache=config.cache, base='base')
 
 class Index:
     def GET(self):
-        hosts = db.get_hosts()
+        hosts = woldb.get_hosts()
         return render.hosts(hosts)
 
 
@@ -42,7 +42,7 @@ class Add:
                 ip = data.ip
             else:
                 ip = None
-            db.add_host(name, mac, ip)
+            woldb.add_host(name, mac, ip)
         except:
             return render.error('Please check your input.')
         return render.success('Host added to database.')
@@ -51,16 +51,16 @@ class Add:
 class Edit:
     def GET(self, id=0):
         if id > 0:
-            host = db.get_host(int(id))
+            host = woldb.get_host(int(id))
             return render.host_form('edit', host)
         else:
-            hosts = db.get_hosts()
+            hosts = woldb.get_hosts()
             return render.edit_hosts(hosts)
 
     def POST(self, id):
         data = web.input(_method='post')
         try:
-            db.update_host(id=id, name=data.name, mac=data.mac, ip=data.ip)
+            woldb.update_host(id=id, name=data.name, mac=data.mac, ip=data.ip)
         except:
             return render.error('Please check your input.')
         return render.success('Host was successfully edited.')
@@ -68,7 +68,7 @@ class Edit:
 
 class Delete:
     def GET(self, id):
-        db.delete_host(int(id))
+        woldb.delete_host(int(id))
         raise web.seeother('/edit')
 
 
@@ -77,10 +77,10 @@ class Wol:
         id = int(id)
         success = True
         if id > 0:
-            host = db.get_host(id)
+            host = woldb.get_host(id)
             success = self.wakeup(host)
         else:
-            hosts = db.get_hosts()
+            hosts = woldb.get_hosts()
             for host in hosts:
                 if not self.wakeup(host):
                     success = False
